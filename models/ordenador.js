@@ -60,4 +60,40 @@ const buscarPrecioMayor = (precio)=>{
     .catch(err=>console.error("Error al obtener registros",err));
 }
 
-module.exports = {buscarPrecioMayor, buscarPorId, buscarPrimero, buscarTodos, Ordenador}
+const nuevoOrdenador = (marca,precio)=>{
+    const nuevoOrdenador = new Ordenador({
+        marca: marca,
+        precio: precio
+      });
+      // Guardar el ordenador en la base de datos
+      nuevoOrdenador.save()
+        .then(ordenador => console.log('Ordenador guardado:', ordenador))
+        .catch(err => console.error('Error al guardar el ordenador:', err));
+      
+}
+
+const updateOrdenador = (idOrdenador, nuevoPrecio)=>{
+    Ordenador.findByIdAndUpdate(idOrdenador, { precio: nuevoPrecio }, { new: true })
+    .then(ordenadorActualizado => {
+        if (ordenadorActualizado) {
+        console.log('Ordenador actualizado:', ordenadorActualizado);
+        } else {
+        console.log('No se encontró ningún ordenador con ese ID.');
+        }
+    })
+    .catch(err => console.error('Error al actualizar el ordenador:', err));
+}
+
+const deleteOrdenador = (idOrdenadorParaBorrar)=>{
+    Ordenador.findByIdAndDelete(idOrdenadorParaBorrar)
+    .then(ordenadorEliminado => {
+        if (ordenadorEliminado) {
+        console.log('Ordenador eliminado:', ordenadorEliminado);
+        } else {
+        console.log('No se encontró ningún ordenador con ese ID.');
+        }
+    })
+    .catch(err => console.error('Error al eliminar el ordenador:', err));
+}
+
+module.exports = {buscarPrecioMayor, buscarPorId, buscarPrimero, buscarTodos, nuevoOrdenador, updateOrdenador, deleteOrdenador,Ordenador}
