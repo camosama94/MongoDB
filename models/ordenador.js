@@ -60,4 +60,4 @@ const buscarPrecioMayor = (precio)=>{
     .catch(err=>console.error("Error al obtener registros",err));
 }
 
-module.exports = {buscarPrecioMayor, buscarPorId, Ordenador}
+module.exports = {buscarPrecioMayor, buscarPorId, buscarPrimero, buscarTodos, Ordenador}
