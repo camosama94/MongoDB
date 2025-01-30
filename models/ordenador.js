@@ -1,7 +1,8 @@
 
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-mongoose.connect('mongodb+srv://camosama:CYfcOiYR8vamuyhi@cluster0.qpb4q.mongodb.net/almacen')
+mongoose.connect(process.env.DATABASE_URL)
   .then(() => console.log('Connected!'));
 
 const ordenadorSchema = new mongoose.Schema({
@@ -13,51 +14,69 @@ const Ordenador = mongoose.model('Ordenador', ordenadorSchema, 'ordenadores');
 
 
 const buscarPrimero = ()=>{
-    Ordenador.findOne()
+    return Ordenador.findOne()
     .then( ordenador=>{
         if(ordenador){
-            console.log("Primer ordenador encontrado", ordenador)
+            console.log("Primer ordenador encontrado", ordenador);
+            return ordenador;
         }else{
-            console.log("No se han encontrado registros")
+            console.log("No se han encontrado registros");
+            return null;
         }
     })
-    .catch(err=>console.error("Error al obtener registros",err));
+    .catch(err=>{
+        console.error("Error al obtener registros",err);
+        throw err;
+    });
 }
 
 const buscarTodos = ()=>{
-    Ordenador.find()
+    return Ordenador.find()
     .then( ordenadores=>{
         if(ordenadores.length>0){
-            console.log("Ordenadores encontrados", ordenadores)
+            console.log("Ordenadores encontrados", ordenadores);
+            return ordenadores;
         }else{
             console.log("No se han encontrado registros")
+            return null;
         }
     })
-    .catch(err=>console.error("Error al obtener registros",err));
+    .catch(err=>{
+        console.error("Error al obtener registros",err);
+        throw err;
+    });
 }
 
 const buscarPorId = (id)=>{
-    Ordenador.findById(id)
+    return Ordenador.findById(id)
     .then( ordenador=>{
         if(ordenador){
-            console.log("Ordenador: ", ordenador)
+            console.log("Ordenador: ", ordenador);
+            return ordenador;
         }else{
-            console.log("No se han encontrado registros con el id "+id)
+            console.log("No se han encontrado registros con el id "+id);
+            return null;
         }
     })
-    .catch(err=>console.error("Error al obtener registros",err));
+    .catch(err=>{
+        console.error("Error al obtener registros",err);
+        throw err;
+    });
 }
 
 const buscarPrecioMayor = (precio)=>{
-    Ordenador.find({precio: {$gt:precio}})
+    return Ordenador.find({precio: {$gt:precio}})
     .then( ordenadores=>{
         if(ordenadores.length>0){
-            console.log("Ordenadores de precio mayor a " +precio+ " encontrados", ordenadores)
+            console.log("Ordenadores de precio mayor a " +precio+ " encontrados", ordenadores);
         }else{
-            console.log("No se han encontrado registros")
+            console.log("No se han encontrado registros");
         }
     })
-    .catch(err=>console.error("Error al obtener registros",err));
+    .catch(err=>{
+        console.error("Error al obtener registros",err)
+        throw err;
+    });
 }
 
 const nuevoOrdenador = (marca,precio)=>{
@@ -68,7 +87,10 @@ const nuevoOrdenador = (marca,precio)=>{
       // Guardar el ordenador en la base de datos
       nuevoOrdenador.save()
         .then(ordenador => console.log('Ordenador guardado:', ordenador))
-        .catch(err => console.error('Error al guardar el ordenador:', err));
+        .catch(err => {
+            console.error('Error al guardar el ordenador:', err);
+            throw err;
+        });
       
 }
 
@@ -81,7 +103,10 @@ const updateOrdenador = (idOrdenador, nuevoPrecio)=>{
         console.log('No se encontró ningún ordenador con ese ID.');
         }
     })
-    .catch(err => console.error('Error al actualizar el ordenador:', err));
+    .catch(err => {
+        console.error('Error al actualizar el ordenador:', err);
+        throw err;
+    });
 }
 
 const deleteOrdenador = (idOrdenadorParaBorrar)=>{
@@ -93,7 +118,10 @@ const deleteOrdenador = (idOrdenadorParaBorrar)=>{
         console.log('No se encontró ningún ordenador con ese ID.');
         }
     })
-    .catch(err => console.error('Error al eliminar el ordenador:', err));
+    .catch(err => {
+        console.error('Error al eliminar el ordenador:', err);
+        throw err;
+    });
 }
 
 module.exports = {buscarPrecioMayor, buscarPorId, buscarPrimero, buscarTodos, nuevoOrdenador, updateOrdenador, deleteOrdenador,Ordenador}

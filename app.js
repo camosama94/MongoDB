@@ -2,6 +2,7 @@ const modeloOrdenador = require('./models/ordenador');
 
 const idBuscado = '6798f6b01e64ff129d05c752'
 
+//Comenta las funciones que no quieras que se ejecuten
 modeloOrdenador.buscarPrecioMayor(1500);
 
 modeloOrdenador.buscarPorId(idBuscado);
