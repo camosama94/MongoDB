@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Lista Ordenadores</h1>
+    <select name="seleccionaOrdenador" id="seleccionaOrdenador">
+    </select>
+
+    <p>Marca: <input type="text" name="marca" id="marca"></p>
+    <p>Precio: <input type="text" name="precio" id="precio"></p>
+    <button id="btn-actualizar">Actualizar</button>
+    <script>
+        document.addEventListener("DOMContentLoaded",() => {fetch("/items")
+                    .then(response => response.json())
+                    .then(data => {
+                        const select = document.getElementById("seleccionaOrdenador");
+                        for (producto of data) {
+                            const option = document.createElement("option");
+                            option.value = producto._id;
+                            option.innerHTML= producto.marca
+                            select.appendChild(option);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error))
+            }
+        )
+
+        const mostrarOrdenador=()=>{
+            id = document.getElementById("seleccionaOrdenador").value;
+            fetch('/items/'+id)
+            .then(response => response.json())
+            .then(data =>{
+                document.getElementById('marca').value = data.marca;
+                document.getElementById('precio').value = data.precio;
+            })
+        }
+
+        document.getElementById("seleccionaOrdenador").addEventListener("change",mostrarOrdenador)
+    </script>
+</body>
+</html>

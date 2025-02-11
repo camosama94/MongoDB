@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width,
+initial-scale=1.0">
+    <title>Index dentro de public</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <h1>Producto</h1>
     <hr>
-    <button id="cogeProducto">Obtener Producto</button>
     <table id="tablaProducto" border="1">
         <thead>
             <tr>
@@ -18,27 +21,53 @@
             </tr>
         </thead>
         <tbody>
-            
+            <!--Generado dinamicamente-->
         </tbody>
     </table>
 </body>
 <script>
-    document.getElementById("cogeProducto")
-    .addEventListener('click', () => {
-        fetch('/items')
-            .then(response => response.json())
-            .then(data => {
-                const table = document.getElementById('tablaProducto');
-                const tbody = table.querySelector('tbody');
-                tbody.innerHTML = '';
-                for (producto of data){
-                    const fila = document.createElement('tr');
-                    fila.innerHTML = `<td>${producto._id}</td><td>${producto.marca}</td><td>${producto.precio}</td>`;
-                    tbody.appendChild(fila);
-                }
-                
-            })
-            .catch(error => console.error('Error',error))
-    });
+    document
+        .addEventListener("DOMContentLoaded",
+            () => {
+                fetch("/items")
+                    .then(response => response.json())
+                    .then(data => {
+                        const table =
+                            document.getElementById("tablaProducto");
+                        const tbody = table.querySelector("tbody");
+                        tbody.innerHTML = ''//Clear the table
+                        for (producto of data) {
+                            const fila = document.createElement("tr");
+                            fila.id = producto._id;
+                            fila.innerHTML =
+                                `<td>${producto._id}</td><td>${producto.marca + ''}</td><td>${producto.precio}</td><td><button
+
+onclick="eliminarOrdenador('${producto._id}')">Borrar
+ordenador</button</td>`
+                            tbody.appendChild(fila);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error))
+            }
+        )
+
+        function eliminarOrdenador(id){
+            if(confirm("Esta seguro?")){
+                fetch('/items/'+id,{
+                    method:'DELETE'
+                })
+                .then(response=>{
+                    if (response.ok){
+                        document.getElementById(id).remove();
+                        alert("Ordenador borrado correctamente");
+                    }else{
+                        alert("Error al eliminar")
+                    }
+                }).catch(err=>{
+                    alert(err);
+                })
+            }
+        }
 </script>
+
 </html>
